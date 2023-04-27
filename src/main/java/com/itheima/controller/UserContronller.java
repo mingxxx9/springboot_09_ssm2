@@ -76,6 +76,7 @@ public class UserContronller {
         List<UserDTO> userList = userService.getAllFriend(host.getId());
         Integer code = userList != null ? Code.GET_OK : Code.GET_ERR;
         String msg = userList != null ? "" : "数据查询失败，请重试！";
+        System.out.println(1);
         return new Result(code,userList,msg);
     }
     @PutMapping("/stole/{id}")

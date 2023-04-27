@@ -40,7 +40,9 @@ public class LoginInterceptor implements HandlerInterceptor {
         Map<Object, Object> usermap = stringRedisTemplate.opsForHash().entries(LOGIN_USER + token);
         //判断是否存在
         if (usermap.isEmpty()) {
-            response.setStatus(401);
+            response.setStatus(200);
+            response.setHeader("Content-Type","application/json;charset=UTF-8");
+            response.getWriter().print("msg: '请登录'");
             return false;
         }
         //map转换为对象
