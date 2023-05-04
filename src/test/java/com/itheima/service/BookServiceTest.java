@@ -18,6 +18,8 @@ public class BookServiceTest {
     @Autowired
     private BookService bookService;
     @Autowired
+    private BlogService blogService;
+    @Autowired
   private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private UserService userService;
@@ -28,10 +30,6 @@ public class BookServiceTest {
         stringRedisTemplate.opsForValue().set("age","12");
     }
     @Test
-    public void testGetById(){
-        Book book = bookService.getById(2);
-        System.out.println(book);
-    }
 
 
     public  void before(){
@@ -41,22 +39,12 @@ public class BookServiceTest {
     public void testOps(){
     System.out.println(UserOps.getUser());
 }
-    @Test
-    public void testGetAll(){
-        List<Book> all = bookService.getAll();
-        System.out.println(all);
-    }
-    @Test
-    public void setStringRedisTemplate(){
-        UserDTO user = userService.getById(3);
-        String jsonStr = JSONUtil.toJsonStr(user);
-        stringRedisTemplate.opsForValue().set("user",jsonStr);
-        String userJson=stringRedisTemplate.opsForValue().get("user");
-        System.out.println(userJson);
-        User newUser=JSONUtil.toBean(userJson,User.class);
-        System.out.println(newUser);
 
 
+
+    @Test
+    public void testBlog(){
+        System.out.println(blogService.getAll());
     }
 
 }

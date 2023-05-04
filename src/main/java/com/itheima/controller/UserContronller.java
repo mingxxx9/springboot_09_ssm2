@@ -5,7 +5,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import com.itheima.domain.GongDe;
-import com.itheima.domain.LoginUser;
 import com.itheima.domain.User;
 import com.itheima.domain.UserDTO;
 import com.itheima.tools.UserOps;
@@ -102,18 +101,18 @@ public class UserContronller {
     }
 @PostMapping("/login")
     public Result UserLogin(@RequestBody User user){
-    System.out.println("到这里了");
     //查询用户
         UserDTO loginUser=userService.login(user);
     if (loginUser==null) return new Result(LOGIN_ERR,null,"密码或用户名错误");
 
     //获取token
     String token = UUID.randomUUID(true).toString();
+    String key=LOGIN_USER+token;
     //redis中存入token
-    LoginUser loginUser1 = BeanUtil.copyProperties(loginUser, LoginUser.class);
-    Map<String, Object> beanToMap = BeanUtil.beanToMap(loginUser1,new HashMap<>(), CopyOptions.create().ignoreNullValue().setFieldValueEditor((fieldName, fieldValue)-> fieldValue.toString()));
-    stringRedisTemplate.opsForHash().putAll("token",beanToMap);
-    stringRedisTemplate.expire(token,30, TimeUnit.MINUTES);
+  //  UserDTO loginUser1 = BeanUtil.copyProperties(loginUser, UserDTO.class);
+    Map<String, Object> beanToMap = BeanUtil.beanToMap(loginUser,new HashMap<>(), CopyOptions.create().ignoreNullValue().setFieldValueEditor((fieldName, fieldValue)-> fieldValue.toString()));
+    stringRedisTemplate.opsForHash().putAll(key,beanToMap);
+    System.out.println(stringRedisTemplate.expire(key, 30, TimeUnit.MINUTES));
 
     //返回token
     return new Result(LOGIN_OK,token,"登录成功");
