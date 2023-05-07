@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+//已经弃用
 @RestController
 @RequestMapping("/blogs")
 public class BlogController {
@@ -42,5 +42,9 @@ public class BlogController {
         for (Blog blog:blogList
         ) blog.setUsername(name);
         return new Result(code,blogList,msg);
+    }
+    @PutMapping("/like/{id}")
+    public Result likeBlog(@PathVariable Integer id){
+       return blogService.likeblog(id);
     }
 }

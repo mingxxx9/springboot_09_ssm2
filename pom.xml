@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.itheima</groupId>
-	<artifactId>springboot_09_ssm</artifactId>
+	<artifactId>project_gongde</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>springboot_09_ssm</name>
 	<description>Demo project for Spring Boot</description>
