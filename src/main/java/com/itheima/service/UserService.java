@@ -3,6 +3,7 @@ package com.itheima.service;
 
 import com.itheima.domain.User;
 import com.itheima.domain.UserDTO;
+import com.itheima.tools.Result;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -49,4 +50,6 @@ public interface UserService {
     public  Integer add(Integer id);
 
     public UserDTO login(User user);
+
+    public Result stoleFriend(Integer id);
 }

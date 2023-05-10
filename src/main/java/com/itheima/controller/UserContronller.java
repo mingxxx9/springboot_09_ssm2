@@ -36,10 +36,10 @@ public class UserContronller {
 
     @PostMapping
     //添加用户
-    public Result save(@RequestBody User user) {
-        boolean flag = userService.save(user);
-        return new Result(flag ? Code.SAVE_OK:Code.SAVE_ERR,flag);
-    }
+//    public Result save(@RequestBody User user) {
+//        boolean flag = userService.save(user);
+//        return new Result(flag ? Code.SAVE_OK:Code.SAVE_ERR,flag);
+//    }
 
     @PutMapping
     //更新数据
@@ -82,42 +82,27 @@ public class UserContronller {
     //偷功德
     @PutMapping("/stole/{id}")
     public Result StoleFriend(@PathVariable Integer id){
-     //获得随机数
-        int random= (int)(Math.random()*10);
-        int value=5;
-        //获得被偷的对象
-        UserDTO friend=userService.getById(id);
-        //获得当前用户
-//        User host=UserOps.getUser();
-        System.out.println(UserOps.getUser());
-        UserDTO host=userService.getById(2);
-        int friend_gongde=friend.getGongDe();
-        int host_gongde=host.getGongDe();
-        if (friend_gongde<5) return new Result(STOLE_ERR,null,"好友已经没有功德了");
-        host.setGongDe(host_gongde+value-random);
-        friend.setGongDe(friend_gongde-value);
-        userService.update(host);
-        userService.update(friend);
-        return new Result(STOLE_OK,new GongDe(host.getGongDe(),friend.getGongDe()),"偷取好友5功德，偷东西扣"+random+"功德，共获得"+(value-random));
-
+    return userService.stoleFriend(id);
     }
-@PostMapping("/login")
-    public Result UserLogin(@RequestBody User user){
-    //查询用户
-        UserDTO loginUser=userService.login(user);
-    if (loginUser==null) return new Result(LOGIN_ERR,null,"密码或用户名错误");
-    //获取token
-    String token = UUID.randomUUID(true).toString();
-    String key=LOGIN_USER+token;
-    //redis中存入token
-  //  UserDTO loginUser1 = BeanUtil.copyProperties(loginUser, UserDTO.class);
-    Map<String, Object> beanToMap = BeanUtil.beanToMap(loginUser,new HashMap<>(), CopyOptions.create().ignoreNullValue().setFieldValueEditor((fieldName, fieldValue)-> fieldValue.toString()));
-    stringRedisTemplate.opsForHash().putAll(key,beanToMap);
-    System.out.println(stringRedisTemplate.expire(key, 30, TimeUnit.MINUTES));
+//@PostMapping("/login")
+//    public Result UserLogin(@RequestBody User user){
+//    //查询用户
+//        UserDTO loginUser=userService.login(user);
+//    if (loginUser==null) return new Result(LOGIN_ERR,null,"密码或用户名错误");
+//    //获取token
+//    String token = UUID.randomUUID(true).toString();
+//    String key=LOGIN_USER+token;
+//    //redis中存入token
+//  //  UserDTO loginUser1 = BeanUtil.copyProperties(loginUser, UserDTO.class);
+//    Map<String, Object> beanToMap = BeanUtil.beanToMap(loginUser,new HashMap<>(), CopyOptions.create().ignoreNullValue().setFieldValueEditor((fieldName, fieldValue)-> fieldValue.toString()));
+//    stringRedisTemplate.opsForHash().putAll(key,beanToMap);
+//    System.out.println(stringRedisTemplate.expire(key, 30, TimeUnit.MINUTES));
+//
+//    //返回token
+//    return new Result(LOGIN_OK,token,"登录成功");
+//
+//    }
 
-    //返回token
-    return new Result(LOGIN_OK,token,"登录成功");
 
-    }
 
 }

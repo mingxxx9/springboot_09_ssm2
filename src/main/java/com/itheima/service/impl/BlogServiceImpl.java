@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.itheima.tools.Code.UPDATE_OK;
+import static com.itheima.tools.Prefix.LIKED_BLOG;
 
 @Service
 public class BlogServiceImpl implements BlogService {
@@ -26,7 +27,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> getById(Integer id) {
+    public Blog getById(Integer id) {
         return blogDao.getById(id);
     }
 @Override
@@ -35,7 +36,7 @@ public class BlogServiceImpl implements BlogService {
     //1.获取登录用户
     Integer userId= UserOps.getUser().getId();
 
-    String key ="blog:liked:"+id;
+    String key =LIKED_BLOG+id;
     Boolean isMember =stringRedisTemplate.opsForSet().isMember(key,userId.toString());
     if(BooleanUtil.isFalse(isMember)){
         boolean isSuccess = blogDao.likeblog(id);

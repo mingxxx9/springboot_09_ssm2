@@ -12,7 +12,6 @@ public class Blog {
     Integer likes;
     Integer dislikes;
     Boolean isliked;
-    Boolean isdisliked;
 
     public Integer getId() {
         return id;
@@ -70,13 +69,7 @@ public class Blog {
         this.isliked = isliked;
     }
 
-    public Boolean getIsdisliked() {
-        return isdisliked;
-    }
 
-    public void setIsdisliked(Boolean isdisliked) {
-        this.isdisliked = isdisliked;
-    }
 
     @Override
     public String toString() {
@@ -88,7 +81,6 @@ public class Blog {
                 ", likes=" + likes +
                 ", dislikes=" + dislikes +
                 ", isliked=" + isliked +
-                ", isdisliked=" + isdisliked +
                 '}';
     }
 }

@@ -1,6 +1,6 @@
 package com.itheima.dao;
 
-import com.itheima.domain.Book;
+
 import com.itheima.domain.User;
 import com.itheima.domain.UserDTO;
 import org.apache.ibatis.annotations.*;
@@ -10,7 +10,7 @@ import java.util.List;
 // TODO 添加@Mapper
 @Mapper
 public interface UserDao {
-    @Insert("insert into login_User (name,gender,password) values(#{name},#{gender},#{password}")
+    @Insert("insert into login_User (name,gender,password) values(#{name},#{gender},#{password})")
     public int save(User user);
 
     @Update("update login_user set name = #{name}, gender = #{gender}, gongDe = #{gongDe},is_ten= #{is_ten} where id = #{id}")
@@ -29,4 +29,8 @@ public interface UserDao {
     public List<UserDTO> getAllFriend(Integer id);
     @Select("select * from login_user where name= #{name} and password=#{password} ")
     public UserDTO loginByPassword(User user);
+    @Select("select is_stoled from is_friend where host=#{host} and friend=#{friend}")
+    public int  queryStoled(@Param("host") Integer host,@Param("friend")Integer friend);
+    @Update("update is_friend set is_stoled=1  where host=#{host} and friend=#{friend}")
+    public int updateStoled(@Param("host") Integer host,@Param("friend")Integer friend);
 }

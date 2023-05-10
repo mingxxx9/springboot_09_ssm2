@@ -10,7 +10,9 @@ import java.util.List;
 @Transactional
 public interface BlogService {
     public List<Blog> getAll();
-    public List<Blog> getById(Integer id);
+    public Blog getById(Integer id);
 
     public Result likeblog(Integer id);
+
+
 }

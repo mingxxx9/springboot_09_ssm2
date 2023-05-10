@@ -11,7 +11,7 @@ public interface BlogDao {
 @Select("select * from conment")
     public List<Blog> getAll();
 @Select("select * from conment where id = #{id}")
-         List<Blog> getById(Integer id);
+         Blog getById(Integer id);
 @Update("update conment set likes=likes+1 where id=#{id}")
        boolean likeblog(Integer id);
     @Update("update conment set likes=likes-1 where id=#{id}")
