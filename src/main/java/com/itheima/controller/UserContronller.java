@@ -7,6 +7,7 @@ import cn.hutool.core.lang.UUID;
 import com.itheima.domain.GongDe;
 import com.itheima.domain.User;
 import com.itheima.domain.UserDTO;
+import com.itheima.service.FriendService;
 import com.itheima.tools.UserOps;
 import com.itheima.service.UserService;
 import com.itheima.tools.Code;
@@ -33,13 +34,8 @@ public class UserContronller {
     private UserService userService;
     @Resource
     StringRedisTemplate stringRedisTemplate;
-
-    @PostMapping
-    //添加用户
-//    public Result save(@RequestBody User user) {
-//        boolean flag = userService.save(user);
-//        return new Result(flag ? Code.SAVE_OK:Code.SAVE_ERR,flag);
-//    }
+    @Autowired
+    private FriendService friendService;
 
     @PutMapping
     //更新数据
@@ -73,7 +69,7 @@ public class UserContronller {
     @GetMapping
     public Result getAllFriend() {
         UserDTO host=UserOps.getUser();
-        List<UserDTO> userList = userService.getAllFriend(host.getId());
+        List<UserDTO> userList = friendService.getAllFriend(host.getId());
         Integer code = userList != null ? Code.GET_OK : Code.GET_ERR;
         String msg = userList != null ? "" : "数据查询失败，请重试！";
         System.out.println(1);
@@ -82,26 +78,15 @@ public class UserContronller {
     //偷功德
     @PutMapping("/stole/{id}")
     public Result StoleFriend(@PathVariable Integer id){
-    return userService.stoleFriend(id);
+    return friendService.stoleFriend(id);
     }
-//@PostMapping("/login")
-//    public Result UserLogin(@RequestBody User user){
-//    //查询用户
-//        UserDTO loginUser=userService.login(user);
-//    if (loginUser==null) return new Result(LOGIN_ERR,null,"密码或用户名错误");
-//    //获取token
-//    String token = UUID.randomUUID(true).toString();
-//    String key=LOGIN_USER+token;
-//    //redis中存入token
-//  //  UserDTO loginUser1 = BeanUtil.copyProperties(loginUser, UserDTO.class);
-//    Map<String, Object> beanToMap = BeanUtil.beanToMap(loginUser,new HashMap<>(), CopyOptions.create().ignoreNullValue().setFieldValueEditor((fieldName, fieldValue)-> fieldValue.toString()));
-//    stringRedisTemplate.opsForHash().putAll(key,beanToMap);
-//    System.out.println(stringRedisTemplate.expire(key, 30, TimeUnit.MINUTES));
-//
-//    //返回token
-//    return new Result(LOGIN_OK,token,"登录成功");
-//
-//    }
+
+    @PutMapping("/follow/{id}")
+    public Result followUser(@PathVariable Integer id){
+
+        return userService.followUser(id);
+    }
+
 
 
 

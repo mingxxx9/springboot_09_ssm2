@@ -52,4 +52,6 @@ public interface UserService {
     public UserDTO login(User user);
 
     public Result stoleFriend(Integer id);
+
+    Result followUser(Integer id);
 }

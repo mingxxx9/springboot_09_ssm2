@@ -1,6 +1,7 @@
 package com.itheima.service.impl;
 
 import cn.hutool.core.util.BooleanUtil;
+import com.itheima.dao.FriendDao;
 import com.itheima.dao.UserDao;
 import com.itheima.domain.GongDe;
 import com.itheima.domain.User;
@@ -17,8 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.itheima.tools.Code.STOLE_ERR;
-import static com.itheima.tools.Code.STOLE_OK;
+import static com.itheima.tools.Code.*;
 import static com.itheima.tools.Prefix.*;
 
 @Service
@@ -27,6 +27,8 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private FriendDao friendDao;
 
     public boolean save(User user) {
         return userDao.save(user) > 0;
@@ -41,15 +43,41 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDTO getById(Integer id) {
-//        if(id == 1){
-//            throw new BusinessException(Code.BUSINESS_ERR,"请不要使用你的技术挑战我的耐性!");
-//        }
+
         return userDao.getById(id);
     }
 
     @Override
     public  UserDTO login(User user) {
        return userDao.loginByPassword(user);
+    }
+
+    @Override
+    public Result followUser(Integer friendid) {
+        //获得当前用户
+        Integer host=UserOps.getID();
+        //判断对方是否也关注了自己
+        String key =FOLLOW_ID+host;
+        Boolean isMember =stringRedisTemplate.opsForSet().isMember(key,friendid.toString());
+        //关注则了直接修改数据库好友表
+        if(BooleanUtil.isTrue(isMember)){
+              friendDao.makeFriend(host,friendid);
+              friendDao.makeFriend(friendid,host);
+              //删除申请
+            stringRedisTemplate.opsForSet().remove(key,friendid.toString());
+            return new Result(SAVE_OK,"互相关注，你已成为对方好友");
+        }
+        //判断是否在对方申请列表redis中
+        key=FOLLOW_ID+friendid;
+        isMember =stringRedisTemplate.opsForSet().isMember(key,host.toString());
+        if(BooleanUtil.isTrue(isMember)){
+            //已经在则取消取消关注
+            stringRedisTemplate.opsForSet().remove(key,host.toString());
+            return new Result(SAVE_OK,"取消关注");
+        }
+       long istrue=  stringRedisTemplate.opsForSet().add(key,host.toString());
+       if (istrue<=0) return new Result(SAVE_ERR,"关注失败");
+         return new Result(SAVE_OK,"关注成功");
     }
 
     @Override
