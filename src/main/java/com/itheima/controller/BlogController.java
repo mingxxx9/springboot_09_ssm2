@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.itheima.tools.Code.*;
 import static com.itheima.tools.Prefix.LIKED_BLOG;
 
 //已经弃用
@@ -29,6 +30,7 @@ public class BlogController {
     public Result getAll() {
          Integer localuserid= UserOps.getUser().getId();
         List<Blog> blogList = blogService.getAll();
+        if (blogList==null||blogList.size()==0) return new Result(GET_ERR,"查询出错");
         for (Blog blog:blogList
              ) {
             int userid=blog.getUserid();
@@ -61,5 +63,12 @@ public class BlogController {
     @PutMapping("/like/{id}")
     public Result likeBlog(@PathVariable Integer id){
        return blogService.likeblog(id);
+    }
+    @PostMapping
+    public Result submitBlog(@RequestBody Blog blog){
+        System.out.println(blog.toString());
+        blog.setUserid(UserOps.getID());
+        Integer res=blogService.save(blog);
+        return new Result(res==0?SAVE_ERR:SAVE_OK,res==0?"发布失败":"发布成功");
     }
 }

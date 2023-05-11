@@ -1,6 +1,9 @@
 package com.itheima.dao;
 
 
+
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.itheima.domain.User;
 import com.itheima.domain.UserDTO;
 import org.apache.ibatis.annotations.*;
@@ -9,7 +12,7 @@ import java.util.List;
 
 // TODO 添加@Mapper
 @Mapper
-public interface UserDao {
+public interface UserDao extends BaseMapper<UserDTO> {
     @Insert("insert into login_User (name,gender,password) values(#{name},#{gender},#{password})")
     public int save(User user);
 
@@ -31,6 +34,8 @@ public interface UserDao {
     public UserDTO loginByPassword(User user);
     @Select("select is_stoled from is_friend where host=#{host} and friend=#{friend}")
     public int  queryStoled(@Param("host") Integer host,@Param("friend")Integer friend);
+    @Select("select * from login_user where name=#{name}")
+    public List<UserDTO>  selectByName(String name);
     @Update("update is_friend set is_stoled=1  where host=#{host} and friend=#{friend}")
     public int updateStoled(@Param("host") Integer host,@Param("friend")Integer friend);
 }

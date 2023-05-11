@@ -35,13 +35,16 @@ public class LoginContronller {
         System.out.println("aa");
         //查询用户
         UserDTO loginUser=userService.login(user);
+        System.out.println(loginUser);
         if (loginUser==null) return new Result(LOGIN_ERR,null,"密码或用户名错误");
         //获取token
         String token = UUID.randomUUID(true).toString();
         String key=LOGIN_USER+token;
         //redis中存入token
         //  UserDTO loginUser1 = BeanUtil.copyProperties(loginUser, UserDTO.class);
+        System.out.println(loginUser);
         Map<String, Object> beanToMap = BeanUtil.beanToMap(loginUser,new HashMap<>(), CopyOptions.create().ignoreNullValue().setFieldValueEditor((fieldName, fieldValue)-> fieldValue.toString()));
+         //Map<String, Object> beanToMap = BeanUtil.beanToMap(loginUser);
         stringRedisTemplate.opsForHash().putAll(key,beanToMap);
         System.out.println(stringRedisTemplate.expire(key, 30, TimeUnit.MINUTES));
 
@@ -54,6 +57,6 @@ public class LoginContronller {
     public Result save(@RequestBody User user) {
         boolean flag = userService.save(user);
         if (flag) return UserLogin(user);
-       else return new Result(Code.SAVE_ERR,flag,"创建失败");
+       else return new Result(Code.SAVE_ERR,flag,"用户已存在");
     }
 }

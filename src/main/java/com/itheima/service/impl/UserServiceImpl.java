@@ -31,7 +31,9 @@ public class UserServiceImpl implements UserService {
     private FriendDao friendDao;
 
     public boolean save(User user) {
-        return userDao.save(user) > 0;
+        if (userDao.selectByName(user.getName()).size()>0) return false;
+        else return userDao.save(user)>0;
+
     }
 
     public boolean update(UserDTO user) {
@@ -59,12 +61,10 @@ public class UserServiceImpl implements UserService {
         //判断对方是否也关注了自己
         String key =FOLLOW_ID+host;
         Boolean isMember =stringRedisTemplate.opsForSet().isMember(key,friendid.toString());
-        //关注则了直接修改数据库好友表
+        //关注了直接修改数据库好友表
         if(BooleanUtil.isTrue(isMember)){
               friendDao.makeFriend(host,friendid);
               friendDao.makeFriend(friendid,host);
-              //删除申请
-            stringRedisTemplate.opsForSet().remove(key,friendid.toString());
             return new Result(SAVE_OK,"互相关注，你已成为对方好友");
         }
         //判断是否在对方申请列表redis中
@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer add(Integer id) {
         UserDTO user= UserOps.getUser();
-       if (user.getIs_ten()==10) return -1;
+       if (user.getIsTen()==10) return -1;
 
         userDao.update(user);
        return user.getGongDe();

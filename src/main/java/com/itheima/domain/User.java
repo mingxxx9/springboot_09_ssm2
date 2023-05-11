@@ -6,14 +6,14 @@ public class User {
     private String gender;
     private String password;
     private int gongDe;
-    private int is_ten;
+    private int isTen;
 
-    public int getIs_ten() {
-        return is_ten;
+    public int getIsTen() {
+        return isTen;
     }
 
-    public void setIs_ten(Integer is_ten) {
-        this.is_ten = is_ten;
+    public void setIsTen(Integer isTen) {
+        this.isTen = isTen;
     }
 
     public int getId() {

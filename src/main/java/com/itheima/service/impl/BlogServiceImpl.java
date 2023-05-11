@@ -30,12 +30,18 @@ public class BlogServiceImpl implements BlogService {
     public Blog getById(Integer id) {
         return blogDao.getById(id);
     }
-@Override
+
+    @Override
+    public Integer save(Blog blog) {
+         return blogDao.save(blog);
+    }
+
+    @Override
     public Result likeblog(Integer id){
 
     //1.获取登录用户
     Integer userId= UserOps.getUser().getId();
-
+  //判断是否已经喜欢过了
     String key =LIKED_BLOG+id;
     Boolean isMember =stringRedisTemplate.opsForSet().isMember(key,userId.toString());
     if(BooleanUtil.isFalse(isMember)){

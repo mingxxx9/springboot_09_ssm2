@@ -51,6 +51,7 @@ public class FriendServiceImpl implements FriendService {
         int friend_gongde=friend.getGongDe();
         int host_gongde=host.getGongDe();
         if (friend_gongde<5) return new Result(STOLE_ERR,null,"好友已经没有功德了");
+        if (host_gongde<5)return new Result(STOLE_ERR,null,"功德少于10，不能偷取他人功德");
         host.setGongDe(host_gongde+value-random);
         friend.setGongDe(friend_gongde-value);
         userDao.update(host);

@@ -13,6 +13,6 @@ public interface BlogService {
     public Blog getById(Integer id);
 
     public Result likeblog(Integer id);
-
+  public Integer save(Blog blog);
 
 }
