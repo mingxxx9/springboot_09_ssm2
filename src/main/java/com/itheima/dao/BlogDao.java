@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 @Mapper
 public interface BlogDao {
+    //asdasdasd
     @Insert("insert into conment (userid,description) values(#{userid},#{description})")
     public int save(Blog blog);
 
